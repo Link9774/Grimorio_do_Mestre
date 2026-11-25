@@ -21,29 +21,36 @@ editSessionBtn.addEventListener("click", () =>{
 });
 
 
-loadSession();
 
 async function loadSession() {
-    
-    const response = await fetch(
-        `http://localhost:3000/sessions/${sessionId}`
-    );
+    try {
+        const response = await fetch(
+            `http://localhost:3001/api/session/${sessionId}`
+        );
 
-currentSession = await response.json();
+        if (!response.ok) {
+            alert("Sessão não encontrada.");
+            window.location.href = "dashboard.html";
+            return;
+        }
 
-if(!currentSession.id){
-    alert("Sessão não encontrada.");
-    window.location.href = "dashboard.html";
-    return;
+        currentSession = await response.json();
+        console.log ("Sessão recebida:", currentSession);
+
+        sessionTitle.textContent = currentSession.name;
+        systemName.textContent = currentSession.system;
+
+        applyTheme(currentSession.system);
+
+        await loadChar();
+
+    } catch (erro) {
+        console.error("Erro ao carregar sessão:", erro);
+        alert("Não foi possível carregar a sessão.");
+    }
 }
 
-sessionTitle.textContent = currentSession.name;
-systemName.textContent = currentSession.system;
-
-applyTheme(currentSession.system);
-
-loadChar();
-}
+loadSession();
 
 function applyTheme(system){
 
@@ -67,12 +74,25 @@ function applyTheme(system){
 }
 
 async function loadChar() {
-    const response = await fetch(
-        `http://localhost:3000/char?sessionId=${sessionId}`,
-    );
-    const chars = await response.json();
+    try {
+        const response = await fetch(
+            `http://localhost:3001/api/characters?sessionId=${sessionId}`
+        );
 
-    renderChar(chars);
+        if (!response.ok) {
+            const dados = await response.json();
+            alert(dados.erro);
+            return;
+        }
+
+        const chars = await response.json();
+
+        renderChar(chars);
+
+    } catch (erro) {
+        console.error("Erro ao carregar personagens:", erro);
+        alert("Não foi possível carregar os personagens.");
+    }
 }
 
 function renderChar(chars){
@@ -227,35 +247,39 @@ function renderChar(chars){
 
 const deleteSessionBtn = document.getElementById("deleteSessionBtn");
 
-deleteSessionBtn.addEventListener("click", async () =>{
+deleteSessionBtn.addEventListener("click", async () => {
+    
     const confirmDelete = confirm(
-        "Deseja realmente excluir esta sessão ?"
+        "Deseja realmente excluir esta sessão?"
     );
-    if(!confirmDelete){
+
+    if (!confirmDelete) {
         return;
     }
-    
-    const response = await fetch(
-        `http://localhost:3000/char?sessionId=${sessionId}`
-    );
-    
-    const chars = await response.json();
 
-    for(const char of chars){
-        await fetch(
-            `http://localhost:3000/char/${char.id}`,{
+    try {
+        const response = await fetch(
+            `http://localhost:3001/api/session/${sessionId}`,
+            {
                 method: "DELETE"
             }
         );
-    }
 
-    await fetch(
-        `http://localhost:3000/sessions/${sessionId}`,
-        {
-            method: "DELETE"
+        const dados = await response.json();
+
+        if (!response.ok) {
+            alert(dados.erro);
+            return;
         }
-    );
-    window.location.href = "dashboard.html";
+
+        alert("Sessão excluída com sucesso!");
+
+        window.location.href = "dashboard.html";
+
+    } catch (erro) {
+        console.error("Erro ao excluir sessão:", erro);
+        alert("Não foi possível excluir a sessão.");
+    }
 });
 
 const createCharBtn= document.getElementById("createCharBtn");
@@ -347,7 +371,7 @@ async function savePlayer(){
         sessionId: sessionId
     };
     await fetch(
-        "http://localhost:3000/char",{
+        "http://localhost:3001/api/characters",{
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -398,7 +422,7 @@ async function saveMonster(){
         sessionId: sessionId
     };
     await fetch(
-        "http://localhost:3000/char", {
+        "http://localhost:3001/api/characters", {
             method: "POST",
             headers:{
                 "Content-Type": "application/json"
@@ -474,7 +498,7 @@ async function saveNpc() {
         sessionId: sessionId
     };
     await fetch(
-        "http://localhost:3000/char",{
+        "http://localhost:3001/api/characters",{
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -496,7 +520,7 @@ async function deleteChar(charId){
         return;
     }
     await fetch(
-         `http://localhost:3000/char/${charId}`,{
+         `http://localhost:3001/api/characters/${charId}`,{
             method: "DELETE"
          }
     );
@@ -506,7 +530,7 @@ async function deleteChar(charId){
 async function changeHp(charId, amount){
     
     const response = await fetch (
-        `http://localhost:3000/char/${charId}`,
+        `http://localhost:3001/api/characters/${charId}`,
     );
     const char = await response.json();
 
@@ -535,7 +559,7 @@ async function changeHp(charId, amount){
     
 
     await fetch(
-        `http://localhost:3000/char/${charId}`,{
+        `http://localhost:3001/api/characters/${charId}`,{
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json"
@@ -566,7 +590,7 @@ async function customHp(charId, heal) {
 
 async function changeSanity(charId, amount) {
     const response = await fetch(
-        `http://localhost:3000/char/${charId}`
+        `http://localhost:3001/api/characters/${charId}`
     );
     const char = await response.json();
     let newSan = Number(char.sanity) + amount;
@@ -578,7 +602,7 @@ async function changeSanity(charId, amount) {
         newSan = 0;
     }
     await fetch(
-        `http://localhost:3000/char/${charId}`,
+        `http://localhost:3001/api/characters/${charId}`,
         {
             method:"PATCH",
             headers:{

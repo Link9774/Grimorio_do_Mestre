@@ -15,17 +15,23 @@ console.log(showSessions);
 console.log(showCreate);
 console.log(createSection);
 
+let sessions = [];
+
 async function loadSessions() {
-    
-    const response = await fetch(
-        `http://localhost:3000/sessions?masterId=${loggedMaster.id}`
-    );
-    sessions = await response.json();
-
-    renderSessions();
+    try{
+        const response = await fetch(
+            `http://localhost:3001/api/sessions?masterId=${loggedMaster.id}`
+        );
+        if(!response.ok){
+            throw new Error("Erro ao carregar sessões.");
+        }
+        sessions = await response.json();
+        renderSessions();
+    } catch (erro){
+        console.error("Erro", erro);
+        alert("Não foi possível carregar suas sessões.");
+    }
 }
-
-
 
 showSessions.addEventListener("click", () => {
 
@@ -49,7 +55,7 @@ createSessionBtn.addEventListener("click", async () =>{
     const system = document.getElementById("systemSelect").value;
 
     if(name === ""){
-        alert("Uma aventura precisa de um grande nome, Digite o nome da sessão");
+        alert("Uma aventura precisa de um grande nome, Digite o nome da Campanha");
 
         return;
     }
@@ -61,18 +67,33 @@ createSessionBtn.addEventListener("click", async () =>{
         masterId: loggedMaster.id 
     };
 
-    await fetch("http://localhost:3000/sessions", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(session)
-    });
+     try {
+        const response = await fetch("http://localhost:3001/api/sessions", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(session)
+        });
 
-    await loadSessions();
+        const dados = await response.json();
 
-    lastSession.innerHTML = `${name} / ${system}`;
-}); 
+        if (!response.ok) {
+            alert(dados.erro);
+            return;
+        }
+
+        await loadSessions();
+
+        lastSession.innerHTML = `${name} / ${system}`;
+
+        console.log("Sessão criada com sucesso!");
+
+    } catch (erro) {
+        console.error("Erro ao criar sessão:", erro);
+        alert("Não foi possível criar a sessão.");
+    }
+});
 
 function renderSessions(){
 
