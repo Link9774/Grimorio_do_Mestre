@@ -1,34 +1,42 @@
+
 const loginForm = document.getElementById("loginForm");
 
 loginForm.addEventListener("submit", async (event) => {
-
     event.preventDefault();
-
 
     const email = document.getElementById("loginEmail").value;
     const password = document.getElementById("loginPassword").value;
-    const response = await fetch("http://localhost:3000/mestres");
-    const mestres = await response.json();
 
-  //  console.log(mestres);
-//console.log(loginEmail.value);
-//console.log(loginPassword.value);
-    
-    const findMaster = mestres.find(
-        mestre => mestre.userEmail === email && mestre.password === password
-    );
-    if(findMaster){
-        
+    try {
+        const response = await fetch("http://localhost:3001/api/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                email: email,
+                password: password
+            })
+        });
+
+        const dados = await response.json();
+
+        if (!response.ok) {
+            alert(dados.erro);
+            return;
+        }
+
         localStorage.setItem(
             "loggedMaster",
-            JSON.stringify(findMaster)
+            JSON.stringify(dados.mestre)
         );
-        console.log("Login realizado");
-        
+
+        console.log("Login realizado!");
+
         window.location.href = "dashboard.html";
-    
-    }
-    if(!findMaster){
-        alert("Senha ou Email estão incorretos");
+
+    } catch (erro) {
+        console.error("Erro ao realizar login:", erro);
+        alert("Não foi possível conectar ao servidor.");
     }
 });

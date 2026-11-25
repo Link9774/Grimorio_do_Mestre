@@ -4,21 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "server": "json-server --watch db.json --port 3000"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Link9774/Grim-rio_do_Mestre.git"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
-  "bugs": {
-    "url": "https://github.com/Link9774/Grim-rio_do_Mestre/issues"
-  },
-  "homepage": "https://github.com/Link9774/Grim-rio_do_Mestre#readme",
   "dependencies": {
-    "json-server": "^1.0.0-beta.15"
+    "mysql2": "^3.24.6"
   }
 }
