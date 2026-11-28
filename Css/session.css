@@ -110,7 +110,12 @@ body.cyberpunk{
     --maincolor: #ff003c;
     --textcolor: white;
 }
-
+body.ordem {
+    --bgcolor: #0b0b0b;
+    --cardcolor: #191919;
+    --maincolor: #a88942;
+    --textcolor: #e6e2d8;
+}
 .hidden{
     display: none;
 }

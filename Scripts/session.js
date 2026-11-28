@@ -70,6 +70,10 @@ function applyTheme(system){
         case "Cyberpunk RED":
             document.body.classList.add("cyberpunk");
         break;
+        
+        case "Ordem Paranormal":
+            document.body.classList.add("ordem");
+        break;
     }
 }
 
@@ -315,7 +319,7 @@ function renderPlayerForm(){
     let sanityField = "";
 
     if(
-        currentSession.system === "Call of Cthulhu"
+        currentSession.system === "Call of Cthulhu" || currentSession.system === "Ordem Paranormal"
     ){
         sanityField = `
         <input

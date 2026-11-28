@@ -1,0 +1,156 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --bgcolor: #0b0b0b;
+    --cardcolor: #191919;
+    --maincolor: #a88942;
+    --textcolor: #e6e2d8;
+    --gold: #d4b76a;
+    --darkgold: #80672f;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background: var(--bgcolor);
+    color: var(--textcolor);
+    font-family: Arial, Helvetica, sans-serif;
+    line-height: 1.7;
+}
+
+header {
+    background: #111111;
+    text-align: center;
+    padding: 40px 20px;
+    border-bottom: 3px solid var(--maincolor);
+}
+
+header h1 {
+    margin-bottom: 10px;
+    font-size: 2.5rem;
+    color: var(--gold);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+nav {
+    background: #151515;
+    padding: 15px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 1px solid var(--darkgold);
+}
+
+nav ul {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    list-style: none;
+}
+
+nav a {
+    text-decoration: none;
+    color: var(--textcolor);
+    font-weight: bold;
+    transition: 0.2s;
+}
+
+nav a:hover {
+    color: var(--gold);
+}
+
+main {
+    width: 90%;
+    max-width: 1200px;
+    margin: 30px auto;
+}
+
+section {
+    background: var(--cardcolor);
+    margin-bottom: 25px;
+    padding: 25px;
+    border-radius: 8px;
+    border-left: 5px solid var(--maincolor);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+section h2 {
+    color: var(--gold);
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+article {
+    margin-top: 20px;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 6px;
+    border: 1px solid rgba(168, 137, 66, 0.2);
+}
+
+article h3 {
+    color: var(--gold);
+    margin-bottom: 10px;
+}
+
+p {
+    margin-bottom: 10px;
+}
+
+ul {
+    padding-left: 20px;
+}
+
+li {
+    margin-bottom: 5px;
+}
+
+strong {
+    color: var(--gold);
+}
+
+img {
+    display: block;
+    width: 100%;
+    max-width: 700px;
+    margin: 20px auto;
+    border-radius: 8px;
+    border: 2px solid var(--maincolor);
+}
+
+footer {
+    background: #111111;
+    text-align: center;
+    padding: 20px;
+    margin-top: 40px;
+    border-top: 2px solid var(--maincolor);
+    color: var(--textcolor);
+}
+
+a[href="index.html"] {
+    display: block;
+    width: fit-content;
+    margin: 20px auto;
+    padding: 12px 20px;
+    background: var(--maincolor);
+    color: #0b0b0b;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: 0.2s;
+}
+
+a[href="index.html"]:hover {
+    background: var(--gold);
+    transform: translateY(-2px);
+}
